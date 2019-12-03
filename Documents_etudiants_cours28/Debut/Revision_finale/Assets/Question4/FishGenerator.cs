@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,14 +19,39 @@ public class FishGenerator : MonoBehaviour {
     public int maxNumberOfFishes = 100;
     public GameObject fishPrefab;
 
+
     private void Start() {
-       
+        GenerateFishes();
     }
 
     public void GenerateFishes() {
+
+        GameObject[] fishList = new GameObject[mapWidth ^ 2];
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapWidth, seed, noiseScale, octaves, persistance, lacunarity, offset);
+        for (int y = 0; y < mapWidth; y++)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                if (noiseMap[x, y] >= 0.5)
+                {
+                    if (FindObjectsOfType<Fish>().Length < maxNumberOfFishes)
+                    {
+                         AddFish(x, y);
+                    }
+                }
+ 
+            }
+        }
+
         DeleteFishes();
         
         
+    }
+
+    public GameObject AddFish(float x,float y)
+    {
+        GameObject fish = Instantiate(fishPrefab, new Vector3(x, y), transform.rotation);
+        return fish;
     }
 
     public void DeleteFishes() {
@@ -49,5 +75,12 @@ public class FishGenerator : MonoBehaviour {
     }
     
     
+}
+[System.Serializable]
+public struct TerrainType
+{
+    public string Name;
+    public float heigth;
+    public TileBase tile;
 }
 

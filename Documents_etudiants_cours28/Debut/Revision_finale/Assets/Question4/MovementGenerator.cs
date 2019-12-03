@@ -29,7 +29,9 @@ public class MovementGenerator : MonoBehaviour {
     private void Update() {
         foreach (Fish fish in FindObjectsOfType<Fish>()) {
             //Code pour le mouvement des poissons
-           
+            noiseMapX = Noise.GenerateNoiseMap(mapWidth, mapWidth, seed, noiseScale, octaves, persistance, lacunarity, offset);
+            noiseMapY = Noise.GenerateNoiseMap(mapWidth, mapWidth, seed, noiseScale, octaves, persistance, lacunarity, offset);
+
 
         }
         if (Time.time - timeLastUpdate > 5) {
